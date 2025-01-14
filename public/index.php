@@ -1,3 +1,11 @@
+<?php
+require_once "../includes/init.php";
+
+use Youdemy\Classes\User;
+use Youdemy\Classes\Course;
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
