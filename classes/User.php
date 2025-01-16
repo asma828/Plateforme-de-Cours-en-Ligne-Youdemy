@@ -81,7 +81,56 @@ class User {
         }
     }
 
- 
+    public static function login($email, $password) {
+        try {
+            $db = Database::getInstance()->getConnection();
+            
+            // Get user data
+            $stmt = $db->prepare('
+                SELECT u.*, r.name as role_name 
+                FROM users u 
+                JOIN roles r ON u.role_id = r.id 
+                WHERE u.email = ?
+            ');
+            $stmt->execute([$email]);
+            $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$userData) {
+                throw new Exception('Invalid email or password.');
+            }
+
+            // Verify password
+            if (!password_verify($password, $userData['password'])) {
+                throw new Exception('Invalid email or password.');
+            }
+
+            // Create session data
+            $_SESSION['user'] = [
+                'id' => $userData['id'],
+                'name' => $userData['name'],
+                'email' => $userData['email'],
+                'role' => $userData['role_name']
+            ];
+
+            return $userData['role_name']; // Return role for redirection
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public static function isLoggedIn() {
+        return isset($_SESSION['user']);
+    }
+
+    public static function logout() {
+        unset($_SESSION['user']);
+        session_destroy();
+    }
+
+    public static function getCurrentUser() {
+        return $_SESSION['user'] ?? null;
+    }
+
 }
 
 
