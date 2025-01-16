@@ -27,6 +27,7 @@ CREATE TABLE courses (
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     content TEXT NULL,
+    content_type ENUM ('video','document');
     teacher_id INT NOT NULL,
     category_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -58,8 +59,14 @@ CREATE TABLE inscriptions (
     FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+CREATE TABLE statistics (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    metric_name VARCHAR(255) NOT NULL,
+    metric_value INT NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
 
-
+insert into roles (name) VALUES ('Admin'),('Student'),('Teacher');
 
 
 
