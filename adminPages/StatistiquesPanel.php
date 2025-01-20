@@ -17,6 +17,7 @@ $totalCategories = $statistiqueModel->Nombre_total_Categories();
 $totalTags = $statistiqueModel->Nombre_total_Tags();
 $repartitionParCategorie = $statistiqueModel->repartitionParCategorie();
 $CoursPlusEtudinat = $statistiqueModel->CoursPlusEtudinat();
+$TopTreeEnseignants = $statistiqueModel->TopTreeEnseignants();
 
 if (isset($_GET['category_id'])) {
 
@@ -255,42 +256,17 @@ if (isset($_GET['category_id'])) {
             </div>
         </div>
 
-        <?php if (isset($_GET['category_id'])): ?>
-            <div class="recent-activity">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="mb-0">Liste des étudiants inscrits au
-                        <span class="text-primary">
-                            <?= $categoryCourses[0]['category_name'] ?>
-                        </span>
-                    </h4>
-                    <button type="button" class="btn btn-primary" style="margin-left: 10px;"
-                        onclick="window.location.href = window.location.href.split('?')[0]"><i class="fa fa-eye-slash"></i>
-                    </button>
-                </div>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Titre du cours</th>
-                                <th>Enseignant</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($categoryCourses as $course): ?>
-                                <tr>
-                                    <td><?= $course['id_cour']; ?></td>
-                                    <td><?= $course['titre_cour']; ?></td>
-                                    <td><?= $course['nom']; ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
+        <div class="top-enseignants mt-5">
+            <h4 class="mb-4">Top 3 Enseignants</h4>
+            <div class="list-group">
+                <?php foreach ($TopTreeEnseignants as $enseignant): ?>
+                    <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <span><?= $enseignant['nom'] ?></span>
+                        <span class="badge badge-primary badge-pill">Nombre de cours : <?= $enseignant['topTree'] ?></span>
+                    </div>
+                <?php endforeach; ?>
             </div>
-        <?php else: ?>
-            <div></div>
-        <?php endif; ?>
+        </div>
 
         <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
