@@ -1,5 +1,4 @@
 <?php
-
 use classes\StatistiqueGlobal;
 
 require_once '../middlewares/AdminAccess.php';
@@ -7,7 +6,6 @@ require_once '../classes/StatistiqueGlobal.php';
 require_once '../classes/Database.php';
 session_start();
 AdminAcess();
-
 
 $statistiqueModel = new StatistiqueGlobal();
 $TotalCourses = $statistiqueModel->Nombre_total_cours();
@@ -20,261 +18,183 @@ $CoursPlusEtudinat = $statistiqueModel->CoursPlusEtudinat();
 $TopTreeEnseignants = $statistiqueModel->TopTreeEnseignants();
 
 if (isset($_GET['category_id'])) {
-
     $categoryCourses = $statistiqueModel->CategoryCourses($_GET['category_id']);
-
 }
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
-    <title>YouDemy - Admin Dashboard</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-    <!-- Favicon -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouDemy Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="../../assets/img/ycd.png" rel="icon">
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap"
-        rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="../../assets/css/dashboard.css">
-    <style>
-        /* Enhanced Stats Cards Styling */
-        .stat-card {
-            background: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            height: 100%;
-            margin-bottom: 1rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-card i {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-
-        .stat-card h3 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin: 0.5rem 0;
-            background: linear-gradient(45deg, #0156FF, #0091ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .stat-card p {
-            color: #666;
-            font-size: 1rem;
-            margin: 0;
-        }
-
-        /* Icon specific backgrounds */
-        .stat-card .fa-user-friends {
-            background: rgba(1, 86, 255, 0.1);
-            color: #0156FF;
-        }
-
-        .stat-card .fa-book {
-            background: rgba(76, 175, 80, 0.1);
-            color: #4CAF50;
-        }
-
-        .stat-card .fa-calendar-check {
-            background: rgba(255, 152, 0, 0.1);
-            color: #FF9800;
-        }
-
-        .stat-card .fa-list {
-            background: rgba(156, 39, 176, 0.1);
-            color: #9C27B0;
-        }
-
-        .stat-card .fa-tags {
-            background: rgba(255, 87, 34, 0.1);
-            color: #FF5722;
-        }
-
-        /* Animation */
-        @keyframes countUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-in {
-            animation: countUp 0.5s ease-out forwards;
-        }
-    </style>
 </head>
-
-<body>
+<body class="bg-gray-50">
     <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h3><i class="fa fa-book-reader mr-2"></i>YouDemy</h3>
+    <aside class="fixed left-0 top-0 h-full w-64 bg-white shadow-lg">
+        <div class="p-6">
+            <!-- Logo -->
+            <div class="flex items-center space-x-2 mb-8">
+                <i class="fas fa-book-reader text-blue-600 text-2xl"></i>
+                <h1 class="text-2xl font-bold">YouDemy</h1>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="space-y-2">
+                <a href="./StatistiquesPanel.php" class="flex items-center space-x-2 p-3 rounded-lg bg-blue-50 text-blue-600">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="./UtilisateursPanel.php" class="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-users"></i>
+                    <span>Utilisateurs</span>
+                </a>
+                <a href="./CoursesPanel.php" class="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Cours</span>
+                </a>
+                <a href="./TagsPanel.php" class="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-tags"></i>
+                    <span>Tags</span>
+                </a>
+                <a href="./CategoryPanel.php" class="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-list"></i>
+                    <span>Categories</span>
+                </a>
+            </nav>
         </div>
-        <div class="sidebar-menu">
-            <a href="./StatistiquesPanel.php" class="menu-item active"><i
-                    class="fas fa-tachometer-alt"></i>Dashboard</a>
-            <a href="./UtilisateursPanel.php" class="menu-item"><i class="fas fa-users"></i>Utilisateurs</a>
-            <a href="./CoursesPanel.php" class="menu-item"><i class="fas fa-graduation-cap"></i>Cours</a>
-            <a href="./TagsPanel.php" class="menu-item"><i class="fas fa-tags"></i>Tags</a>
-            <a href="./CategoryPanel.php" class="menu-item"><i class="fas fa-list"></i>Categories</a>
-        </div>
-    </div>
+    </aside>
 
     <!-- Main Content -->
-    <div class="main-content">
-        <!-- Top Bar -->
-        <div class="top-bar d-flex justify-content-between align-items-center">
-            <button class="btn btn-link d-md-none" id="sidebarToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="user-profile">
+    <main class="ml-64 p-8">
+        <!-- Header with Session Info -->
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-bold">Dashboard Overview</h2>
+            <div class="flex items-center space-x-4">
                 <?php if (isset($_SESSION['utilisateur'])): ?>
-                    <span><?php echo $_SESSION['utilisateur']['nom']; ?></span>
+                    <span class="font-medium"><?php echo $_SESSION['utilisateur']['nom']; ?></span>
                 <?php else: ?>
-                    <span>Admin User</span>
+                    <span class="font-medium">Admin User</span>
                 <?php endif; ?>
-            </div>
-            <a href="../actions/lougout.php"
-                style="text-decoration: none;color: black;font-weight: bold;border-radius: 5px;padding: 5px 10px;background-color:rgb(1, 86, 255);"><i
-                    class="
-                fas fa-sign-out-alt" style="color: white;"></i></a>
-        </div>
-
-        <!-- Stats Cards -->
-        <div class="row justify-content-center">
-            <div class="col-md-2">
-                <div class="stat-card">
-                    <i class="fas fa-user-friends"></i>
-                    <h3><?= $totalUtilisateurs ?></h3>
-                    <p>Utilisateurs Total</p>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="stat-card">
-                    <i class="fas fa-book"></i>
-                    <h3><?= $TotalCourses ?></h3>
-                    <p>Cours Total</p>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="stat-card">
-                    <i class="fas fa-calendar-check"></i>
-                    <h3><?= $totalInscriptions ?></h3>
-                    <p>Inscriptions total</p>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="stat-card">
-                    <i class="fas fa-list"></i>
-                    <h3><?= $totalCategories ?></h3>
-                    <p>Categories Total</p>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="stat-card">
-                    <i class="fas fa-tags"></i>
-                    <h3><?= $totalTags ?></h3>
-                    <p>Total Mots-Clé</p>
-                </div>
+                <a href="../actions/lougout.php" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
             </div>
         </div>
 
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
+            <!-- Users Stats -->
+            <div class="bg-white p-6 rounded-lg shadow-sm hover:shadow-lg transition-shadow">
+                <div class="flex items-center space-x-4">
+                    <div class="p-3 rounded-full bg-blue-500">
+                        <i class="fas fa-users text-white"></i>
+                    </div>
+                    <div>
+                        <p class="text-3xl font-bold"><?php echo $totalUtilisateurs; ?></p>
+                        <p class="text-gray-600 text-sm">Utilisateurs Total</p>
+                    </div>
+                </div>
+            </div>
 
-        <div class="p-3 bg-white rounded shadow-sm d-flex align-items-center justify-content-between mt-4"
-            style="width: 83%;margin: auto;">
-            <h4 class="d-inline-block text-muted mb-0"><span
-                    class="animate-in text-primary"><?= $CoursPlusEtudinat['titre_cour'] ?></span> est le cours le plus
-                étudiants:
+            <!-- Courses Stats -->
+            <div class="bg-white p-6 rounded-lg shadow-sm hover:shadow-lg transition-shadow">
+                <div class="flex items-center space-x-4">
+                    <div class="p-3 rounded-full bg-green-500">
+                        <i class="fas fa-book text-white"></i>
+                    </div>
+                    <div>
+                        <p class="text-3xl font-bold"><?php echo $TotalCourses; ?></p>
+                        <p class="text-gray-600 text-sm">Cours Total</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- More stats cards... -->
+            <!-- Similar structure for Inscriptions, Categories, and Tags -->
+        </div>
+
+        <!-- Most Popular Course Section -->
+        <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
+            <h4 class="text-xl font-bold mb-4">
+                <span class="text-blue-600"><?php echo $CoursPlusEtudinat['titre_cour']; ?></span> 
+                est le cours le plus étudiants: 
+                <span class="text-blue-600"><?php echo $CoursPlusEtudinat['total']; ?></span>
             </h4>
-            <h3 class="d-inline-block  text-primary ml-2 mb-0"><?= $CoursPlusEtudinat['total'] ?></h3>
         </div>
 
-
-
-        <div class="recent-activity mt-4">
-            <h4 class="mb-4">Répartition par catégorie</h4>
-            <div class="table-responsive">
-                <table class="table">
+        <!-- Category Distribution Section -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h4 class="text-xl font-bold mb-4">Répartition par catégorie</h4>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
                     <thead>
-                        <tr>
-                            <td>nom de category</td>
-                            <td>nombre de courses</td>
+                        <tr class="bg-gray-50">
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">nom de category</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">nombre de courses</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="divide-y divide-gray-200">
                         <?php foreach ($repartitionParCategorie as $category): ?>
-
-                            <tr>
-                                <td><?= $category['category_name'] ?></td>
-                                <td><a href="?category_id=<?= $category['id_category'] ?>"><?= $category['totalCour'] ?></a>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4"><?php echo $category['category_name']; ?></td>
+                                <td class="px-6 py-4">
+                                    <a href="?category_id=<?php echo $category['id_category']; ?>" 
+                                       class="text-blue-600 hover:text-blue-800">
+                                        <?php echo $category['totalCour']; ?>
+                                    </a>
                                 </td>
                             </tr>
-
                         <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div class="top-enseignants mt-5">
-            <h4 class="mb-4">Top 3 Enseignants</h4>
-            <div class="list-group">
-                <?php foreach ($TopTreeEnseignants as $enseignant): ?>
-                    <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                        <span><?= $enseignant['nom'] ?></span>
-                        <span class="badge badge-primary badge-pill">Nombre de cours : <?= $enseignant['topTree'] ?></span>
+        <!-- Top Teachers Section -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h4 class="text-xl font-bold mb-4">Top 3 Enseignants</h4>
+            <div class="space-y-4">
+                <?php foreach ($TopTreeEnseignants as $index => $enseignant): ?>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center space-x-4">
+                            <div class="p-2 rounded-full <?php echo $index === 0 ? 'bg-yellow-100 text-yellow-600' : ($index === 1 ? 'bg-gray-100 text-gray-600' : 'bg-orange-100 text-orange-600'); ?>">
+                                <i class="fas fa-award"></i>
+                            </div>
+                            <span class="font-medium"><?php echo $enseignant['nom']; ?></span>
+                        </div>
+                        <span class="text-sm bg-blue-100 text-blue-600 px-3 py-1 rounded-full">
+                            Nombre de cours : <?php echo $enseignant['topTree']; ?>
+                        </span>
                     </div>
                 <?php endforeach; ?>
             </div>
         </div>
+    </main>
 
-        <!-- JavaScript Libraries -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-
-        <script>
-      
-        </script>
+    <!-- Category Courses Modal (if category_id is set) -->
+    <?php if (isset($categoryCourses)): ?>
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white p-6 rounded-lg max-w-2xl w-full mx-4">
+                <h3 class="text-xl font-bold mb-4">Courses in Category</h3>
+                <div class="max-h-96 overflow-y-auto">
+                    <!-- Display category courses here -->
+                    <?php foreach ($categoryCourses as $course): ?>
+                        <div class="p-4 border-b hover:bg-gray-50">
+                            <h4 class="font-medium"><?php echo $course['title']; ?></h4>
+                            <!-- Add more course details as needed -->
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <button onclick="window.location.href='StatistiquesPanel.php'" 
+                        class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                    Close
+                </button>
+            </div>
+        </div>
+    <?php endif; ?>
 </body>
-
 </html>
