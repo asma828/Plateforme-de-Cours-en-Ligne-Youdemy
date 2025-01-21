@@ -26,6 +26,24 @@ seConnecterRedirect();
     <div class="min-h-screen auth-gradient flex items-center justify-center px-4">
         <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
             <!-- Logo and Title -->
+             <!-- erreur message for ensignant register -->
+             <?php if (isset($_SESSION['success_register'])): ?>
+            <div class="alert alert-sucees" role="alert">
+        <?php 
+        echo $_SESSION['success_register'];
+        unset($_SESSION['success_register']); 
+        ?>
+    </div>
+             <?php endif; ?>
+
+          <?php if (isset($_SESSION['error_register'])): ?>
+         <div class="alert alert-danger" role="alert">
+        <?php 
+        echo $_SESSION['error_register'];
+        unset($_SESSION['error_register']); 
+        ?>
+    </div>
+           <?php endif; ?>
             <div class="text-center mb-8">
                 <a href="../index.php" class="inline-flex items-center space-x-2">
                     <i class="fas fa-book-reader text-3xl text-blue-600"></i>
@@ -80,6 +98,16 @@ seConnecterRedirect();
                     Connexion
                 </button>
             </form>
+            <!-- erreur massege for ensignant seconnecter  -->
+            <?php if (isset($_SESSION['error_enseignant'])): ?>
+        <div class="alert alert-danger" role="alert">
+        <?php 
+        echo $_SESSION['error_enseignant'];
+        unset($_SESSION['error_enseignant']); 
+        ?>
+      </div>
+             <?php endif; ?>
+
 
             <!-- Register Link -->
             <div class="text-center mt-6">
@@ -92,7 +120,7 @@ seConnecterRedirect();
             </div>
         </div>
     </div>
-
+        
     <!-- Form Validation Script -->
     <script>
         let email = document.getElementById('email');
