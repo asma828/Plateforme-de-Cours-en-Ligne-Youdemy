@@ -1,5 +1,4 @@
 <?php
-
 namespace Dashboard\Admin;
 use classes\Utilisateur;
 use classes\Etudiant;
@@ -9,222 +8,214 @@ require_once '../classes/Enseignant.php';
 require_once '../middlewares/AdminAccess.php';
 
 $utilisateurModel = new Utilisateur("","","","");
-
 $utilisateursObjEnseignant = $utilisateurModel->getAllUtilisateursEnseignant();
 $utilisateursObjEtudiant = $utilisateurModel->getAllUtilisateursEtudiant();
 
 session_start();
 AdminAcess();
-
-
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouDemy - Utilisateurs</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-    <!-- Favicon -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="../../assets/img/ycd.png" rel="icon">
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap"
-        rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="../../assets/css/dashboard.css">
 </head>
-
-<body>
+<body class="bg-gray-50">
     <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h3><i class="fa fa-book-reader mr-2"></i>YouDemy</h3>
+    <aside class="fixed left-0 top-0 h-full w-64 bg-white shadow-lg">
+        <div class="p-6">
+            <!-- Logo -->
+            <div class="flex items-center space-x-2 mb-8">
+                <i class="fas fa-book-reader text-blue-600 text-2xl"></i>
+                <h1 class="text-2xl font-bold">YouDemy</h1>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="space-y-2">
+                <a href="./StatistiquesPanel.php" class="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="./UtilisateursPanel.php" class="flex items-center space-x-2 p-3 rounded-lg bg-blue-50 text-blue-600">
+                    <i class="fas fa-users"></i>
+                    <span>Utilisateurs</span>
+                </a>
+                <a href="./CoursesPanel.php" class="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Cours</span>
+                </a>
+                <a href="./TagsPanel.php" class="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-tags"></i>
+                    <span>Tags</span>
+                </a>
+                <a href="./CategoryPanel.php" class="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-list"></i>
+                    <span>Categories</span>
+                </a>
+            </nav>
         </div>
-        <div class="sidebar-menu">
-            <a href="./StatistiquesPanel.php" class="menu-item"><i class="fas fa-tachometer-alt"></i>Dashboard</a>
-            <a href="./UtilisateursPanel.php" class="menu-item active"><i class="fas fa-users"></i>Utilisateurs</a>
-            <a href="./CoursesPanel.php" class="menu-item"><i class="fas fa-graduation-cap"></i>Cours</a>
-            <a href="./TagsPanel.php" class="menu-item"><i class="fas fa-tags"></i>Tags</a>
-            <a href="./CategoryPanel.php" class="menu-item"><i class="fas fa-list"></i>Categories</a>
-        </div>
-    </div>
+    </aside>
 
     <!-- Main Content -->
-    <div class="main-content">
-        <!-- Top Bar -->
-        <div class="top-bar d-flex justify-content-between align-items-center">
-            <button class="btn btn-link d-md-none" id="sidebarToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="user-profile">
+    <main class="ml-64 p-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-bold">Gestion des Utilisateurs</h2>
+            <div class="flex items-center space-x-4">
                 <?php if (isset($_SESSION['utilisateur'])): ?>
-                    <span><?php echo $_SESSION['utilisateur']['nom']; ?></span>
+                    <span class="font-medium"><?php echo $_SESSION['utilisateur']['nom']; ?></span>
                 <?php else: ?>
-                    <span>Admin User</span>
+                    <span class="font-medium">Admin User</span>
                 <?php endif; ?>
+                <a href="../actions/lougout.php" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
             </div>
-            <a href="../actions/lougout.php"
-                style="text-decoration: none;color: black;font-weight: bold;border-radius: 5px;padding: 5px 10px;background-color:rgb(1, 86, 255);"><i
-                    class="
-                fas fa-sign-out-alt" style="color: white;"></i></a>
         </div>
 
-        <!-- Recent Activity -->
-        <div class="recent-activity">
-            <h4 class="mb-4">List Enseignant</h4>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
+        <!-- Teachers Section -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h4 class="text-xl font-bold mb-4">Liste des Enseignants</h4>
+            
+            <?php if (isset($_SESSION['success_enseignant'])): ?>
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
+                    <?php echo $_SESSION['success_enseignant']; unset($_SESSION['success_enseignant']); ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['error_enseignant'])): ?>
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+                    <?php echo $_SESSION['error_enseignant']; unset($_SESSION['error_enseignant']); ?>
+                </div>
+            <?php endif; ?>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
                         <tr>
-                            <th>Nom</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th class="text-center">Account</th>
-                            <th class="text-center">Action</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nom</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Account</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <?php if (isset($_SESSION['success_enseignant'])): ?>
-                            <div class="alert alert-success" role="alert">
-                                <?php echo $_SESSION['success_enseignant'];
-                                unset($_SESSION['success_enseignant']); ?>
-                            </div>
-                        <?php elseif (isset($_SESSION['error_enseignant'])): ?>
-                            <div class="alert alert-danger" role="alert">
-                                <?php echo $_SESSION['error_enseignant'];
-                                unset($_SESSION['error_enseignant']); ?>
-                            </div>
-                        <?php endif; ?>
-
+                    <tbody class="bg-white divide-y divide-gray-200">
                         <?php foreach ($utilisateursObjEnseignant as $utilisateur): ?>
-
                             <?php if ($utilisateur->role === 'enseignant'): ?>
-                                <tr>
-                                    <td><?= $utilisateur->nom ?></td>
-                                    <td><?= $utilisateur->email ?></td>
-                                    <td><?= $utilisateur->role ?></td>
-                                    <td class="text-center">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap"><?= $utilisateur->nom ?></td>
+                                    <td class="px-6 py-4 whitespace-nowrap"><?= $utilisateur->email ?></td>
+                                    <td class="px-6 py-4 whitespace-nowrap"><?= $utilisateur->role ?></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <form action="../actions/activerEnseignant.php" method="post">
                                             <input type="hidden" name="id" value="<?= $utilisateur->id_utilisateur ?>">
                                             <?php if ($utilisateur->is_active != 0): ?>
-                                                <i class="fas fa-check-circle text-success" style="margin-left: 5px;"></i>
+                                                <i class="fas fa-check-circle text-green-500 text-xl"></i>
                                             <?php else: ?>
-                                                <select class="form-control" style="width: 105px; margin: 0 auto;" name="is_active"
-                                                    onchange="this.form.submit()">
+                                                <select class="form-select w-32 mx-auto rounded border-gray-300" 
+                                                        name="is_active" 
+                                                        onchange="this.form.submit()">
                                                     <option value="0" selected>Inactive</option>
                                                     <option value="1">Active</option>
                                                 </select>
-                                            </form>
-                                        <?php endif; ?>
+                                            <?php endif; ?>
+                                        </form>
                                     </td>
-                                    <td class="text-center">
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <a href="../actions/DeleteEnseignant.php?utilisateurId=<?= $utilisateur->id_utilisateur ?>"
-                                            onclick="return confirm('Etes-vous s ur de vouloir supprimer cet utilisateur ?')"
-                                            class="btn btn-primary">
+                                           onclick="return confirm('Etes-vous sûr de vouloir supprimer cet utilisateur ?')"
+                                           class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                             <i class="fas fa-trash-alt"></i>
                                         </a>
                                     </td>
-
                                 </tr>
                             <?php endif; ?>
-
                         <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
         </div>
-        <!-- Recent Activity -->
-        <div class="recent-activity mt-3">
-            <h4 class="mb-4">List Etudiant</h4>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
+
+        <!-- Students Section -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h4 class="text-xl font-bold mb-4">Liste des Étudiants</h4>
+
+            <?php if (isset($_SESSION['success_etudiant'])): ?>
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
+                    <?php echo $_SESSION['success_etudiant']; unset($_SESSION['success_etudiant']); ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['error_etudiant'])): ?>
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+                    <?php echo $_SESSION['error_etudiant']; unset($_SESSION['error_etudiant']); ?>
+                </div>
+            <?php endif; ?>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
                         <tr>
-                            <th>Nom</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th class="text-center">banned</th>
-                            <th class="text-center">Action</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nom</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Status</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-
-                        <?php if (isset($_SESSION['success_etudiant'])): ?>
-                            <div class="alert alert-success" role="alert">
-                                <?php echo $_SESSION['success_etudiant'];
-                                unset($_SESSION['success_etudiant']); ?>
-                            </div>
-                        <?php elseif (isset($_SESSION['error_etudiant'])): ?>
-                            <div class="alert alert-danger" role="alert">
-                                <?php echo $_SESSION['error_etudiant'];
-                                unset($_SESSION['error_etudiant']); ?>
-                            </div>
-                        <?php endif; ?>
-
+                    <tbody class="bg-white divide-y divide-gray-200">
                         <?php foreach ($utilisateursObjEtudiant as $utilisateur): ?>
-
                             <?php if ($utilisateur->role === 'etudiant'): ?>
-                                <tr>
-                                    <td><?= $utilisateur->nom ?></td>
-                                    <td><?= $utilisateur->email ?></td>
-                                    <td><?= $utilisateur->role ?></td>
-                                    <td class="text-center">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap"><?= $utilisateur->nom ?></td>
+                                    <td class="px-6 py-4 whitespace-nowrap"><?= $utilisateur->email ?></td>
+                                    <td class="px-6 py-4 whitespace-nowrap"><?= $utilisateur->role ?></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <?php if ($utilisateur->is_baned == 1): ?>
                                             <a href="../actions/banUEtudiant.php?id=<?= $utilisateur->id_utilisateur ?>&action=0"
-                                                class="btn btn-success btn-sm" style="display: inline;">Activate</a>
+                                               class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                                Activate
+                                            </a>
                                         <?php else: ?>
                                             <a href="../actions/banUEtudiant.php?id=<?= $utilisateur->id_utilisateur ?>&action=1"
-                                                class="btn btn-danger btn-sm" style="display: inline;">Ban</a>
+                                               class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                Ban
+                                            </a>
                                         <?php endif; ?>
                                     </td>
-                                    <td class="text-center">
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <a href="../actions/DeleteEtudiant.php?utilisateurId=<?= $utilisateur->id_utilisateur ?>"
-                                            onclick="return confirm('Etes-vous s ur de vouloir supprimer cet utilisateur ?')"
-                                            class="btn btn-primary">
+                                           onclick="return confirm('Etes-vous sûr de vouloir supprimer cet utilisateur ?')"
+                                           class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                             <i class="fas fa-trash-alt"></i>
                                         </a>
                                     </td>
-
                                 </tr>
                             <?php endif; ?>
-
                         <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
-
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    </main>
 
     <script>
-        // Sidebar Toggle
-        $("#sidebarToggle").click(function (e) {
-            e.preventDefault();
-            $(".sidebar").toggleClass("active");
-            $(".main-content").toggleClass("active");
-        });
-
-        // Make menu items active on click
-        $(".menu-item").click(function () {
-            $(".menu-item").removeClass("active");
-            $(this).addClass("active");
-        });
+        // Mobile sidebar toggle
+        const sidebarToggle = document.querySelector('[data-sidebar-toggle]');
+        const sidebar = document.querySelector('aside');
+        
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('translate-x-0');
+                sidebar.classList.toggle('-translate-x-full');
+            });
+        }
     </script>
 </body>
-
 </html>
