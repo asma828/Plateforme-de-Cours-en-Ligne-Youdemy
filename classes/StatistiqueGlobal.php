@@ -67,4 +67,15 @@ class StatistiqueGlobal
         $stmt->execute();
         return $stmt->fetch();
     }
+    
+    public function TopTreeEnseignants()
+    {
+        $sql = "SELECT nom, COUNT(co.id_cour) as 'topTree' from
+                cours co join enseignants en on co.id_enseignant = en.id_enseignant 
+                JOIN utilisateurs u on u.id_utilisateur = en.id_utilisateur 
+                GROUP BY co.id_enseignant ORDER BY topTree DESC LIMIT 3";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 }
