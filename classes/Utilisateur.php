@@ -2,7 +2,8 @@
 
 namespace Classes;
 use Classes\Database;
-require_once __DIR__ . '/Etudiant.php'; // Adjust the path based on your directory structure
+require_once __DIR__ . '/Etudiant.php'; 
+require_once __DIR__ . '/Enseignant.php';// Adjust the path based on your directory structure
 
 class Utilisateur{
 
@@ -55,7 +56,7 @@ class Utilisateur{
 
     public function createNewEnseignant($objEnseignant)
     {
-        $sql = "INSERT INTO enseignants (id_utilisateur) VALUES (:id_utilisateur)";
+        $sql = "INSERT INTO enseignants (id_utilisateur,is_active) VALUES (:id_utilisateur,0)";
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':id_utilisateur', $objEnseignant->id_utilisateur);
         $stmt->execute();

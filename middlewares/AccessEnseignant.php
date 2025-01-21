@@ -1,5 +1,6 @@
 <?php
 
+use Classes\Enseignant;
 
 function AccessEnseignant()
 {
@@ -15,4 +16,6 @@ function AccessEnseignant()
         header('Location: ../pages/seConnecter.php');
         exit();
     }
+
+    
 }

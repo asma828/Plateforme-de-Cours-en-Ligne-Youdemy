@@ -36,19 +36,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($utilisateur['role'] === 'enseignant') {
         $enseignant = $utilisateurModel->getUtilisateurEnseignantById($utilisateur['id_utilisateur']);
-        $_SESSION['utilisateur'] = $enseignant;
 
-
-        if ($enseignant['is_active'] == 0) {
-            $_SESSION['error_enseignant'] = "L'enseignant n'est pas actif.";
+          if (!$enseignant || $enseignant['is_active'] == 0) {
+            $_SESSION['error_enseignant'] = "Votre compte enseignant n'est pas encore activé. Veuillez contacter l'administrateur.";
             header('Location: ../pages/seConnecter.php');
             exit();
-
-        } else {
-            header('Location: ../enseignantPages/StatistiquesPanel.php');
-            exit();
-
         }
+        
+        // Only set session and redirect if teacher is active
+        $_SESSION['utilisateur'] = $enseignant;
+        header('Location: ../enseignantPages/StatistiquesPanel.php');
+        exit();
 
     } elseif ($utilisateur['role'] === 'etudiant') {
         $etudiant = $utilisateurModel->getElementById($utilisateur['id_utilisateur']);

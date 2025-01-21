@@ -10,13 +10,10 @@ class Tag {
     private $db;
 
     public function __construct($tag_name = null, $id_tag = null) {
-        if (class_exists('Classes\Database')) {
             $this->db = Database::getInstance();
             $this->tag_name = $tag_name;
             $this->id_tag = $id_tag;
-        } else {
-            throw new \Exception("Database class not found in Classes namespace");
-        }
+        
     }
 
     public function __get($attr) {
@@ -37,7 +34,6 @@ class Tag {
         foreach ($tags as $tag) {
             $tagsObj[] = new Tag($tag['tag_name'], $tag['id_tag']);
         }
-        
         return $tagsObj;
     }
 
@@ -51,27 +47,28 @@ class Tag {
         return new Tag($tag['tag_name'], $tag['id_tag']);
     }
 
-    public function addTagToCourse($id_cours) {
+    public function Ajouter_Tag_Courses($tag, $id_cours)
+    {
         $sql = "INSERT INTO cours_tags(id_cour, id_tag) VALUES (:id_cour, :id_tag)";
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':id_cour', $id_cours);
-        $stmt->bindValue(':id_tag', $this->id_tag);
+        $stmt->bindValue(':id_tag', $tag);
         $stmt->execute();
         return $stmt->rowCount();
     }
 
-    public function getCourseTags($id_cours) {
+    public function getCoursTags($id_cours) {
         $sql = "SELECT * FROM cours_tags JOIN tags ON cours_tags.id_tag = tags.id_tag WHERE id_cour = :id_cour";
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':id_cour', $id_cours);
         $stmt->execute();
         return $stmt->fetchAll();
     }
-
-    public function deleteCourseTags($id_cours) {
+    
+    public function DeleteCoursTags($id_cour) {
         $sql = "DELETE FROM cours_tags WHERE id_cour = :id_cour";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':id_cour', $id_cours);
+        $stmt->bindValue(':id_cour', $id_cour);
         $stmt->execute();
         return $stmt->rowCount();
     }
@@ -84,20 +81,22 @@ class Tag {
         return $this->db->lastInsertId();
     }
 
-    public function deleteTag() {
+    public function deleteTag($id_tag){
         $sql = "DELETE FROM tags WHERE id_tag = :id_tag";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':id_tag', $this->id_tag);
+        $stmt->bindValue(':id_tag', $id_tag);
         $stmt->execute();
         return $stmt->rowCount();
     }
 
-    public function updateTag($new_tag_name) {
+
+    public function updateTag($id_tag, $tag){
         $sql = "UPDATE tags SET tag_name = :tag_name WHERE id_tag = :id_tag";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':id_tag', $this->id_tag);
-        $stmt->bindValue(':tag_name', $new_tag_name);
+        $stmt->bindValue(':id_tag', $id_tag);
+        $stmt->bindValue(':tag_name', $tag);
         $stmt->execute();
         return $stmt->rowCount();
     }
+
 }

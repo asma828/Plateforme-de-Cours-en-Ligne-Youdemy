@@ -47,5 +47,6 @@ class Course
     {
         $this->$attr = $value;
     }
+    
 
 }

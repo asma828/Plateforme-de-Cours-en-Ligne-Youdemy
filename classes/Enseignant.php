@@ -3,6 +3,7 @@
 namespace Classes;
 use Classes\Utilisateur;
 use Classes\Database;
+require_once __DIR__ . '/Utilisateur.php'; 
 
 class Enseignant extends Utilisateur{
     private $id_enseignant;
@@ -38,6 +39,15 @@ class Enseignant extends Utilisateur{
         $stmt->bindValue(':id_utilisateur', $id_utilisateur);
         $stmt->execute();
         return $stmt->rowCount();
+    }
+
+    public function SelectedEnseignant($id)
+    {
+        $sql = "SELECT * FROM enseignants WHERE id_utilisateur = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch();
     }
 }
 
