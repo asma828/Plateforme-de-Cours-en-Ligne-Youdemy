@@ -13,138 +13,115 @@ AdminAcess();
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
-    <title>YouDemy - Admin Dashboard</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-    <!-- Favicon -->
-    <link href="../../assets/img/ycd.png" rel="icon">
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap"
-        rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="../../assets/css/dashboard.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouDemy - Tags Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-
-<body>
+<body class="bg-gray-50">
     <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h3><i class="fa fa-book-reader mr-2"></i>YouDemy</h3>
+    <aside class="fixed left-0 top-0 h-full w-64 bg-white shadow-lg">
+        <div class="p-6">
+            <!-- Logo -->
+            <div class="flex items-center space-x-2 mb-8">
+                <i class="fas fa-book-reader text-blue-600 text-2xl"></i>
+                <h1 class="text-2xl font-bold">YouDemy</h1>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="space-y-2">
+                <a href="./StatistiquesPanel.php" class="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="./UtilisateursPanel.php" class="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </a>
+                <a href="./CoursesPanel.php" class="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Courses</span>
+                </a>
+                <a href="./TagsPanel.php" class="flex items-center space-x-2 p-3 rounded-lg bg-blue-50 text-blue-600">
+                    <i class="fas fa-tags"></i>
+                    <span>Tags</span>
+                </a>
+                <a href="./CategoryPanel.php" class="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-list"></i>
+                    <span>Categories</span>
+                </a>
+            </nav>
         </div>
-        <div class="sidebar-menu">
-            <a href="./StatistiquesPanel.php" class="menu-item"><i class="fas fa-tachometer-alt"></i>Dashboard</a>
-            <a href="./UtilisateursPanel.php" class="menu-item"><i class="fas fa-users"></i>Utilisateurs</a>
-            <a href="./CoursesPanel.php" class="menu-item"><i class="fas fa-graduation-cap"></i>Cours</a>
-            <a href="./TagsPanel.php" class="menu-item active"><i class="fas fa-tags"></i>Tags</a>
-            <a href="./CategoryPanel.php" class="menu-item"><i class="fas fa-list"></i>Categories</a>
-        </div>
-    </div>
+    </aside>
 
     <!-- Main Content -->
-    <div class="main-content">
-        <!-- Top Bar -->
-        <div class="top-bar d-flex justify-content-between align-items-center">
-            <button class="btn btn-link d-md-none" id="sidebarToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="user-profile">
-                <?php if (isset($_SESSION['utilisateur'])): ?>
-                    <span><?php echo $_SESSION['utilisateur']['nom']; ?></span>
-                <?php else: ?>
-                    <span>Admin User</span>
-                <?php endif; ?>
+    <main class="ml-64 p-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800">Tags Management</h2>
+                <p class="text-gray-600">Manage course tags efficiently</p>
             </div>
-            <a href="../actions/lougout.php"
-                style="text-decoration: none;color: black;font-weight: bold;border-radius: 5px;padding: 5px 10px;background-color:rgb(1, 86, 255);"><i
-                    class="
-                fas fa-sign-out-alt" style="color: white;"></i></a>
-        </div>
-
-        <!-- Stats Cards -->
-        <div class="row">
-            <div class="col-md-12 d-flex justify-content-between align-items-center mb-4">
-                <span class="text-muted">Gérez vos Tags efficacement</span>
-                <a class="btn btn-primary text-white" href="../pages/AjouterTag__form.php">
-                    <i class="fas fa-plus-circle"></i> Ajouter un nouveau Tag
+            <div class="flex items-center space-x-4">
+                <a href="../pages/AjouterTag__form.php" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-plus-circle mr-2"></i>Add New Tag
+                </a>
+                <a href="../actions/logout.php" class="p-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                    <i class="fas fa-sign-out-alt"></i>
                 </a>
             </div>
-
         </div>
 
-        <!-- Recent Activity -->
+        <!-- Alert Messages -->
         <?php if (isset($_SESSION['success'])): ?>
-            <div class="alert alert-success" role="alert">
-                <?php echo $_SESSION['success'];
-                unset($_SESSION['success']); ?>
-            </div>
-        <?php elseif (isset($_SESSION['error'])): ?>
-            <div class="alert alert-danger" role="alert">
-                <?php echo $_SESSION['error'];
-                unset($_SESSION['error']); ?>
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                <?php echo $_SESSION['success']; unset($_SESSION['success']); ?>
             </div>
         <?php endif; ?>
-        <div class="recent-activity">
-            <h4 class="mb-4">List des Tags</h4>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nom</th>
-                            <th class="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($tagsObj as $tag): ?>
+
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                <?php echo $_SESSION['error']; unset($_SESSION['error']); ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Tags Table -->
+        <div class="bg-white rounded-lg shadow-sm">
+            <div class="p-6">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
                             <tr>
-                                <td><?php echo $tag->id_tag; ?></td>
-                                <td><?php echo $tag->tag_name; ?></td>
-                                <td class="text-center">
-                                    <a href="../actions/SupprimerTag_action.php?id=<?php echo $tag->id_tag; ?>"
-                                        class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Voulez-vous vraiment supprimer ce cours ?')"><i
-                                            class="fas fa-trash"></i></a>
-                                    <a href="../pages/ModifierTag__form.php?id=<?php echo $tag->id_tag; ?>"
-                                        class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
-                                </td>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tag Name</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Actions</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <?php foreach ($tagsObj as $tag): ?>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap"><?= $tag->id_tag ?></td>
+                                    <td class="px-6 py-4"><?= $tag->tag_name ?></td>
+                                    <td class="px-6 py-4 text-center">
+                                        <a href="../pages/ModifierTag__form.php?id=<?= $tag->id_tag ?>"
+                                           class="inline-flex items-center px-3 py-2 border border-transparent text-sm rounded-md text-white bg-blue-600 hover:bg-blue-700 mr-2">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="../actions/SupprimerTag_action.php?id=<?= $tag->id_tag ?>"
+                                           onclick="return confirm('Are you sure you want to delete this tag?')"
+                                           class="inline-flex items-center px-3 py-2 border border-transparent text-sm rounded-md text-white bg-red-600 hover:bg-red-700">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        // Sidebar Toggle
-        $("#sidebarToggle").click(function (e) {
-            e.preventDefault();
-            $(".sidebar").toggleClass("active");
-            $(".main-content").toggleClass("active");
-        });
-
-        // Make menu items active on click
-        $(".menu-item").click(function () {
-            $(".menu-item").removeClass("active");
-            $(this).addClass("active");
-        });
-    </script>
+    </main>
 </body>
-
 </html>
