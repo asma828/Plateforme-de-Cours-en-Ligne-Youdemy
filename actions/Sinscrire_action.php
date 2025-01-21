@@ -10,7 +10,6 @@ use Classes\Enseignant;
 session_start();
 
 require_once '../classes/Utilisateur.php';
-require_once '../classes/Utilisateur.php';
 require_once '../classes/Enseignant.php';
 require_once '../classes/Etudiant.php';
 require_once '../classes/Database.php';
@@ -30,19 +29,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    $utilisateurModel = new Utilisateur($nom, $email, $password, $role);
+      $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
 
-    $existEmail = $utilisateurModel->getElementByEmail($email);
-
-    if ($existEmail) {
-        $_SESSION['error_email'] = "Cet email est déjà utilisé.";
-        header('Location: ../pages/Sinscrire.php');
-        exit();
-    }
-
-    $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
-    $objUtilisateur = new Utilisateur($nom, $email, $passwordHashed, $role);
-    $id_utilisateur = $utilisateurModel->createNewUtilisateur($objUtilisateur, $passwordHashed);
+      $utilisateurModel = new Utilisateur($nom, $email, $passwordHashed, $role);
+      if ($utilisateurModel->getElementByEmail($email)) {
+          $_SESSION['error_email'] = "Cet email est déjà utilisé.";
+          header('Location: ../pages/Sinscrire.php');
+          exit();
+      }
+      // Create user
+      $id_utilisateur = $utilisateurModel->createNewUtilisateur($utilisateurModel, $passwordHashed);
 
 
     if ($role === 'etudiant') {
@@ -64,12 +60,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($enseignantModel) {
 
-            $enseignant = $utilisateurModel->getElementById($id_utilisateur);
-            $_SESSION['utilisateur'] = $enseignant;
-
+            $_SESSION['success_register'] = "Votre compte enseignant a été créé avec succès.";
             header('Location: ../pages/seConnecter.php');
             exit();
         }
-
     }
+
+    // If we get here, something went wrong
+    $_SESSION['error_register'] = "Une erreur est survenue lors de l'inscription.";
+    header('Location: ../pages/Sinscrire.php');
+    exit();
 }
