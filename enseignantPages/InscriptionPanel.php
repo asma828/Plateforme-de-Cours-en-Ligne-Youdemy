@@ -1,5 +1,4 @@
 <?php
-
 use classes\Inscription;
 
 require_once '../classes/Inscription.php';
@@ -10,172 +9,144 @@ session_start();
 AccessEnseignant();
 
 $inscriptionModel = new Inscription("","");
-
 $enseignantInscriptions = $inscriptionModel->getEnseignantInscriptions($_SESSION['utilisateur']['id_enseignant']);
 
 if (isset($_GET['id_cour'])) {
     $id_cour = $_GET['id_cour'];
     $EtudinatCourseInscrit = $inscriptionModel->CourseEtudiantInscite($id_cour);
 }
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouDemy - Enseignant Dashboard</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-    <!-- Favicon -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="../../assets/img/ycd.png" rel="icon">
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap"
-        rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="../../assets/css/dashboard.css">
 </head>
-
-<body>
+<body class="bg-gray-50">
     <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h3><i class="fa fa-book-reader mr-2"></i>YouDemy</h3>
+    <aside class="fixed left-0 top-0 h-full w-64 bg-white shadow-lg">
+        <div class="p-6">
+            <!-- Logo -->
+            <div class="flex items-center space-x-2 mb-8">
+                <i class="fas fa-book-reader text-blue-600 text-2xl"></i>
+                <h1 class="text-2xl font-bold">YouDemy</h1>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="space-y-2">
+                <a href="./StatistiquesPanel.php" class="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="./CoursesPanel.php" class="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Cours</span>
+                </a>
+                <a href="./InscriptionPanel.php" class="flex items-center space-x-2 p-3 rounded-lg bg-blue-50 text-blue-600">
+                    <i class="fas fa-list-ol"></i>
+                    <span>Inscriptions</span>
+                </a>
+            </nav>
         </div>
-        <div class="sidebar-menu">
-            <a href="./StatistiquesPanel.php" class="menu-item">
-                <i class="fas fa-tachometer-alt"></i>Dashboard
-            </a>
-            <a href="./CoursesPanel.php" class="menu-item">
-                <i class="fas fa-graduation-cap"></i>Cours
-            </a>
-            <a href="./InscriptionPanel.php" class="menu-item active">
-                <i class="fas fa-list-ol"></i>Inscriptions
-            </a>
-        </div>
-    </div>
+    </aside>
 
     <!-- Main Content -->
-    <div class="main-content">
-        <!-- Top Bar -->
-        <div class="top-bar d-flex justify-content-between align-items-center">
-            <button class="btn btn-link d-md-none" id="sidebarToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="user-profile">
+    <main class="ml-64 p-8">
+        <!-- Header with Session Info -->
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-bold">Liste des Inscriptions</h2>
+            <div class="flex items-center space-x-4">
                 <?php if (isset($_SESSION['utilisateur'])): ?>
-                    <span><?php echo $_SESSION['utilisateur']['nom']; ?></span>
+                    <span class="font-medium"><?php echo $_SESSION['utilisateur']['nom']; ?></span>
                 <?php else: ?>
-                    <span>Admin User</span>
+                    <span class="font-medium">Admin User</span>
                 <?php endif; ?>
+                <a href="../actions/lougout.php" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
             </div>
-            <a href="../actions/lougout.php"
-                style="text-decoration: none;color: black;font-weight: bold;border-radius: 5px;padding: 5px 10px;background-color:rgb(1, 86, 255);"><i
-                    class="
-                fas fa-sign-out-alt" style="color: white;"></i></a>
         </div>
-        <!-- Recent Activity -->
-        <div class="recent-activity">
-            <h4 class="mb-4">List D'inscription</h4>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID Cours</th>
-                            <th>Titre du Cours</th>
-                            <th>Date d'inscription (Première)</th>
-                            <th>Nbr d'inscription</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($enseignantInscriptions as $inscription): ?>
-                            <tr>
-                                <td><?= $inscription['id_cour'] ?></td>
-                                <td><?= $inscription['titre_cour'] ?></td>
-                                <td><?= $inscription['first_insc_date'] ?></td>
-                                <td>
-                                    <a href="?id_cour=<?= $inscription['id_cour'] ?>">
-                                        <?= $inscription['total_etudiants'] ?>
-                                    </a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
 
-            </div>
-        </div>
-        <?php if (isset($_GET['id_cour'])): ?>
-            <div class="student-list mt-5">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="mb-0">Liste des étudiants inscrits au
-                        <span class="text-primary">
-                            <?= $EtudinatCourseInscrit[0]['titre_cour'] ?>
-                        </span>
-                    </h4>
-                    <button type="button" class="btn btn-primary" style="margin-left: 10px;"
-                        onclick="window.location.href = window.location.href.split('?')[0]"><i class="fa fa-eye-slash"></i>
-                    </button>
-                </div>
-                <div class="table-responsive">
-                    <table class="table">
+        <!-- Inscriptions Table -->
+        <div class="bg-white rounded-lg shadow-sm">
+            <div class="p-6">
+                <h4 class="text-xl font-bold mb-4">Liste D'inscription</h4>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
                         <thead>
-                            <tr>
-                                <th>ID Étudiant</th>
-                                <th>Nom de l'étudiant</th>
-                                <th>Email de l'étudiant</th>
-                                <th>Date d'inscription</th>
+                            <tr class="bg-gray-50">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID Cours</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Titre du Cours</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date d'inscription</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nbr d'inscription</th>
                             </tr>
                         </thead>
-                        <tbody id="studentTableBody">
-
-                            <?php foreach ($EtudinatCourseInscrit as $etd): ?>
-                                <tr>
-                                    <td><?= $etd['id_etudiant'] ?></td>
-                                    <td><?= $etd['nom'] ?></td>
-                                    <td><?= $etd['email'] ?></td>
-                                    <td><?= $etd['date_insc'] ?></td>
-
+                        <tbody class="divide-y divide-gray-200">
+                            <?php foreach ($enseignantInscriptions as $inscription): ?>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4"><?= $inscription['id_cour'] ?></td>
+                                    <td class="px-6 py-4"><?= $inscription['titre_cour'] ?></td>
+                                    <td class="px-6 py-4"><?= $inscription['first_insc_date'] ?></td>
+                                    <td class="px-6 py-4">
+                                        <a href="?id_cour=<?= $inscription['id_cour'] ?>" 
+                                           class="text-blue-600 hover:text-blue-800">
+                                            <?= $inscription['total_etudiants'] ?>
+                                        </a>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
             </div>
-        <?php else: ?>
-            <div></div>
+        </div>
+
+        <!-- Student List Section -->
+        <?php if (isset($_GET['id_cour'])): ?>
+            <div class="mt-8 bg-white rounded-lg shadow-sm">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="text-xl font-bold">
+                            Liste des étudiants inscrits au
+                            <span class="text-blue-600">
+                                <?= $EtudinatCourseInscrit[0]['titre_cour'] ?>
+                            </span>
+                        </h4>
+                        <button onclick="window.location.href = window.location.href.split('?')[0]"
+                                class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID Étudiant</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nom</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date d'inscription</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <?php foreach ($EtudinatCourseInscrit as $etd): ?>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4"><?= $etd['id_etudiant'] ?></td>
+                                        <td class="px-6 py-4"><?= $etd['nom'] ?></td>
+                                        <td class="px-6 py-4"><?= $etd['email'] ?></td>
+                                        <td class="px-6 py-4"><?= $etd['date_insc'] ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         <?php endif; ?>
-
-    </div>
-
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        // Sidebar Toggle
-        $("#sidebarToggle").click(function (e) {
-            e.preventDefault();
-            $(".sidebar").toggleClass("active");
-            $(".main-content").toggleClass("active");
-        });
-
-        // Make menu items active on click
-        $(".menu-item").click(function () {
-            $(".menu-item").removeClass("active");
-            $(this).addClass("active");
-        });
-    </script>
+    </main>
 </body>
-
 </html>

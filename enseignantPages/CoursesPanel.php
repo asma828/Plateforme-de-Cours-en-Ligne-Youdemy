@@ -7,152 +7,123 @@ require_once '../middlewares/AccessEnseignant.php';
 AccessEnseignant();
 
 $CourseModel = new CourseModel();
-
 $coursesObj = $CourseModel->getAllEnseignantCourses($_SESSION['utilisateur']['id_utilisateur']);
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouDemy - Enseignant Dashboard</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-    <!-- Favicon -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="../../assets/img/ycd.png" rel="icon">
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap"
-        rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="../../assets/css/dashboard.css">
 </head>
-
-<body>
+<body class="bg-gray-50">
     <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h3><i class="fa fa-book-reader mr-2"></i>YouDemy</h3>
+    <aside class="fixed left-0 top-0 h-full w-64 bg-white shadow-lg">
+        <div class="p-6">
+            <!-- Logo -->
+            <div class="flex items-center space-x-2 mb-8">
+                <i class="fas fa-book-reader text-blue-600 text-2xl"></i>
+                <h1 class="text-2xl font-bold">YouDemy</h1>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="space-y-2">
+                <a href="./StatistiquesPanel.php" class="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="./CoursesPanel.php" class="flex items-center space-x-2 p-3 rounded-lg bg-blue-50 text-blue-600">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Cours</span>
+                </a>
+                <a href="./InscriptionPanel.php" class="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-list-ol"></i>
+                    <span>Inscriptions</span>
+                </a>
+            </nav>
         </div>
-        <div class="sidebar-menu">
-            <a href="./StatistiquesPanel.php" class="menu-item"><i class="fas fa-list-ol"></i>Inscriptions</a>
-            <a href="./CoursesPanel.php" class="menu-item active"><i class="fas fa-graduation-cap"></i>Cours</a>
-        </div>
-    </div>
+    </aside>
 
     <!-- Main Content -->
-    <div class="main-content">
-        <!-- Top Bar -->
-        <div class="top-bar d-flex justify-content-between align-items-center">
-            <button class="btn btn-link d-md-none" id="sidebarToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="user-profile">
+    <main class="ml-64 p-8">
+        <!-- Header with Session Info -->
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-bold">Gestion des Cours</h2>
+            <div class="flex items-center space-x-4">
                 <?php if (isset($_SESSION['utilisateur'])): ?>
-                    <span><?php echo $_SESSION['utilisateur']['nom']; ?></span>
+                    <span class="font-medium"><?php echo $_SESSION['utilisateur']['nom']; ?></span>
                 <?php else: ?>
-                    <span>Admin User</span>
+                    <span class="font-medium">Admin User</span>
                 <?php endif; ?>
-            </div>
-            <a href="../actions/lougout.php"
-                style="text-decoration: none;color: black;font-weight: bold;border-radius: 5px;padding: 5px 10px;background-color:rgb(1, 86, 255);"><i
-                    class="
-                fas fa-sign-out-alt" style="color: white;"></i></a>
-        </div>
-        <!-- Stats Cards -->
-        <div class="row">
-            <div class="col-md-12 d-flex justify-content-between align-items-center mb-4">
-                <span class="text-muted">Gérez vos cours efficacement</span>
-                <a class="btn btn-primary text-white" href="../pages/AjouterCours__form.php">
-                    <i class="fas fa-plus-circle"></i> Ajouter un nouveau cours
+                <a href="../actions/lougout.php" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                    <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
             </div>
-
         </div>
 
-        <!-- Recent Activity -->
+        <!-- Action Bar -->
+        <div class="flex justify-between items-center mb-8">
+            <span class="text-gray-600">Gérez vos cours efficacement</span>
+            <a href="../pages/AjouterCours__form.php" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                <i class="fas fa-plus-circle mr-2"></i>Ajouter un nouveau cours
+            </a>
+        </div>
+
+        <!-- Alert Messages -->
         <?php if (isset($_SESSION['success'])): ?>
-            <div class="alert alert-success" role="alert">
-                <?php echo $_SESSION['success'];
-                unset($_SESSION['success']); ?>
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6" role="alert">
+                <?php echo $_SESSION['success']; unset($_SESSION['success']); ?>
             </div>
         <?php elseif (isset($_SESSION['error'])): ?>
-            <div class="alert alert-danger" role="alert">
-                <?php echo $_SESSION['error'];
-                unset($_SESSION['error']); ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
+                <?php echo $_SESSION['error']; unset($_SESSION['error']); ?>
             </div>
         <?php endif; ?>
-        <div class="recent-activity">
-            <h4 class="mb-4">List des Courses</h4>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Titre du cours</th>
-                            <th>Description du cours</th>
-                            <th>Category</th>
-                            <th class="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        // echo "<pre>";
-                        // print_r($coursesObj);
-                        // echo "</pre>";
-                        
-                        ?>
-                        <?php foreach ($coursesObj as $course): ?>
-                            <tr>
-                                <td><?= $course->id_cour; ?></td>
-                                <td><?= $course->titre_cour; ?></td>
-                                <td><?= substr($course->description_cours, 0, 50) ?></td>
-                                <td><?= $course->category_id; ?></td>
-                                <td class="text-center">
-                                    <a href="../actions/SupprimerCours_action.php?id=<?php echo $course->id_cour; ?>"
-                                        class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Voulez-vous vraiment supprimer ce cours ?')"><i
-                                            class="fas fa-trash"></i></a>
-                                    <a href="../pages/ModifierCours__form.php?id=<?php echo $course->id_cour; ?>"
-                                        class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
 
-                    </tbody>
-                </table>
+        <!-- Courses Table -->
+        <div class="bg-white rounded-lg shadow-sm">
+            <div class="p-6">
+                <h4 class="text-xl font-bold mb-4">Liste des Cours</h4>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Titre du cours</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Catégorie</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <?php foreach ($coursesObj as $course): ?>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4"><?= $course->id_cour; ?></td>
+                                    <td class="px-6 py-4"><?= $course->titre_cour; ?></td>
+                                    <td class="px-6 py-4"><?= substr($course->description_cours, 0, 50); ?>...</td>
+                                    <td class="px-6 py-4"><?= $course->category_id; ?></td>
+                                    <td class="px-6 py-4 text-center">
+                                        <a href="../pages/ModifierCours__form.php?id=<?= $course->id_cour; ?>" 
+                                           class="inline-block px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="../actions/SupprimerCours_action.php?id=<?= $course->id_cour; ?>" 
+                                           class="inline-block px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                                           onclick="return confirm('Voulez-vous vraiment supprimer ce cours ?')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        // Sidebar Toggle
-        $("#sidebarToggle").click(function (e) {
-            e.preventDefault();
-            $(".sidebar").toggleClass("active");
-            $(".main-content").toggleClass("active");
-        });
-
-        // Make menu items active on click
-        $(".menu-item").click(function () {
-            $(".menu-item").removeClass("active");
-            $(this).addClass("active");
-        });
-    </script>
+    </main>
 </body>
-
 </html>
