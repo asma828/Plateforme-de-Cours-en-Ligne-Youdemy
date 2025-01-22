@@ -40,20 +40,20 @@ class Inscription
         return $stmt->rowCount();
     }
 
-    public function getInscriptions()
-    {
-        $sql = "SELECT * FROM inscription";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
-        $inscriptions = $stmt->fetchAll();
-        $inscriptionsObj = [];
+    // public function getInscriptions()
+    // {
+    //     $sql = "SELECT * FROM inscription";
+    //     $stmt = $this->db->prepare($sql);
+    //     $stmt->execute();
+    //     $inscriptions = $stmt->fetchAll();
+    //     $inscriptionsObj = [];
 
-        foreach ($inscriptions as $insc) {
-            $inscriptionsObj[] = new Inscription($insc['id_etudiant'], $insc['id_cour'], $insc['date_insc'], $insc['id_insc']);
-        }
+    //     foreach ($inscriptions as $insc) {
+    //         $inscriptionsObj[] = new Inscription($insc['id_etudiant'], $insc['id_cour'], $insc['date_insc'], $insc['id_insc']);
+    //     }
 
-        return $inscriptionsObj;
-    }
+    //     return $inscriptionsObj;
+    // }
     public function getUserInscriptions($id_etudiant, $id_cour)
     {
         $sql = "SELECT * FROM inscription WHERE id_etudiant = :id_etudiant and id_cour = :id_cour";
@@ -82,14 +82,14 @@ class Inscription
     }
 
 
-    public function countEtudiantInscriptions($id_cour)
-    {
-        $sql = "SELECT COUNT(id_etudiant) as total_etudiants FROM inscription WHERE id_cour = :id_cour group BY id_cour";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':id_cour', $id_cour);
-        $stmt->execute();
-        return $stmt->fetch()['total_etudiants'];
-    }
+    // public function countEtudiantInscriptions($id_cour)
+    // {
+    //     $sql = "SELECT COUNT(id_etudiant) as total_etudiants FROM inscription WHERE id_cour = :id_cour group BY id_cour";
+    //     $stmt = $this->db->prepare($sql);
+    //     $stmt->bindValue(':id_cour', $id_cour);
+    //     $stmt->execute();
+    //     return $stmt->fetch()['total_etudiants'];
+    // }
 
     public function CourseEtudiantInscite($id_cour)
     {

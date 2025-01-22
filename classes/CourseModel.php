@@ -163,16 +163,6 @@ class CourseModel
         return $stmt->rowCount();
     }
 
-    public function fetchAll($search)
-    {
-        $search = "%$search%";
-        $sql = "SELECT * FROM cours co join categories ca on co.category_id = ca.id_category join enseignants en on co.id_enseignant = en.id_enseignant join utilisateurs u on en.id_utilisateur = u.id_utilisateur WHERE co.titre_cour LIKE :search OR ca.category_name LIKE :search OR u.nom LIKE :search";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':search', $search);
-        $stmt->execute();
-        return $stmt->fetchAll();
-    }
-
     public function MyCourses($id_utilisateur)
     {
         $sql = "SELECT * FROM cours c join inscription i on c.id_cour = i.id_cour JOIN etudiants e on e.id_etudiant = i.id_etudiant WHERE e.id_utilisateur = :id_utilisateur";
