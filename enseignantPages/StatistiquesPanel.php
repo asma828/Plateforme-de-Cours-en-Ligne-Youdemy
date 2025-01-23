@@ -137,46 +137,7 @@ $countTotalCours = $inscriptionModel->countTotalCours();
         </div>
 
         <!-- Student List Modal -->
-        <?php if (isset($_GET['id_cour'])): ?>
-            <div class="mt-8 bg-white rounded-lg shadow-sm">
-                <div class="p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h4 class="text-xl font-bold">
-                            Liste des étudiants inscrits au
-                            <span class="text-blue-600">
-                                <?= $EtudinatCourseInscrit[0]['titre_cour'] ?>
-                            </span>
-                        </h4>
-                        <button onclick="window.location.href = window.location.href.split('?')[0]"
-                                class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                            <i class="fa fa-eye-slash"></i>
-                        </button>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead>
-                                <tr class="bg-gray-50">
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID Étudiant</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nom</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date d'inscription</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200">
-                                <?php foreach ($EtudinatCourseInscrit as $etd): ?>
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="px-6 py-4"><?= $etd['id_etudiant'] ?></td>
-                                        <td class="px-6 py-4"><?= $etd['nom'] ?></td>
-                                        <td class="px-6 py-4"><?= $etd['email'] ?></td>
-                                        <td class="px-6 py-4"><?= $etd['date_insc'] ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        <?php endif; ?>
+       
     </main>
 </body>
 </html>

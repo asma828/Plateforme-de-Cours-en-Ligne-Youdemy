@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // If we get here, something went wrong
+    // If i get here, something went wrong
     $_SESSION['error_register'] = "Une erreur est survenue lors de l'inscription.";
     header('Location: ../pages/Sinscrire.php');
     exit();

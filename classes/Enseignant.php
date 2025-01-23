@@ -41,14 +41,7 @@ class Enseignant extends Utilisateur{
         return $stmt->rowCount();
     }
 
-    public function SelectedEnseignant($id)
-    {
-        $sql = "SELECT * FROM enseignants WHERE id_utilisateur = :id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':id', $id);
-        $stmt->execute();
-        return $stmt->fetch();
-    }
+   
 }
 
 
